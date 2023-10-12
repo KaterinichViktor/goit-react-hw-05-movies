@@ -6,8 +6,8 @@ import Movies from './Movies';
 import MovieDetails from './MovieDetails';
 import SearchMovies from './SearchMovies';
 import TrendingMovies from './TrendingMovies';
-import Cast from './Cast'; // Import Cast component
-import Reviews from './Reviews'; // Import Reviews component
+import Cast from './Cast';
+import Reviews from './Reviews';
 
 export const App = () => {
   return (
@@ -26,7 +26,6 @@ export const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:movieId" element={<MovieDetails />}>
-            {/* Nested routes for Cast and Reviews */}
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
           </Route>
@@ -37,3 +36,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default App;
