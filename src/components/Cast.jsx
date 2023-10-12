@@ -20,7 +20,6 @@ function Cast() {
 
   return (
     <div>
-      <h3>Акторський склад</h3>
       <ul>
         {cast.map((actor) => (
           <li key={actor.id}>
@@ -29,7 +28,7 @@ function Cast() {
               alt={actor.name}
             />
             <p>{actor.name}</p>
-            <p>Персонаж: {actor.character}</p>
+            <p>Character: {actor.character}</p>
           </li>
         ))}
       </ul>

@@ -4,7 +4,7 @@ import TrendingMovies from './TrendingMovies';
 
 function Home() {
   return (
-    <div>
+    <div className='trending'>
       <TrendingMovies />
     </div>
   );

@@ -11,7 +11,6 @@ function Movies() {
 
   return (
     <div>
-      <h1>Пошук фільмів</h1>
       <SearchMovies onSearchResults={handleSearchResults} />
       <ul>
         {searchResults.map((movie) => (

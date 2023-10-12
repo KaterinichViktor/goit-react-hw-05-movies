@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import api from './API';
 
 function SearchMovies() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-//   const navigate = useNavigate(); // Додали змінну для навігації
+  const navigate = useNavigate(); // Use the useNavigate hook
 
   const handleSearch = async () => {
     try {
@@ -14,22 +13,31 @@ function SearchMovies() {
         params: { query },
       });
       setSearchResults(response.data.results);
+
+      // Update the route with the search query
+      navigate(`/movies?query=${query}`);
     } catch (error) {
       console.error('Помилка при пошуку фільмів', error);
     }
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSearch();
+  };
+
   return (
     <div>
-      <h2>Пошук фільмів</h2>
-      <input
-        type="text"
-        placeholder="Пошук фільмів"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Пошук</button>
-      <ul>
+      <form onSubmit={handleFormSubmit}>
+        <input
+          type="text"
+          // placeholder="Пошук фільмів"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button type="submit" className='search-btn'>Search</button>
+      </form>
+      <ul className='search-results'>
         {searchResults.map((movie) => (
           <li key={movie.id}>
             <Link to={`/movies/${movie.id}`}>{movie.title}</Link>

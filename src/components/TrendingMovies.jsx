@@ -22,7 +22,7 @@ function TrendingMovies() {
   return (
     <div>
       <h2>Trending today</h2>
-      <ul>
+      <ul className='trending-list'>
         {movies.map((movie) => (
           <li key={movie.id}>
             <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
