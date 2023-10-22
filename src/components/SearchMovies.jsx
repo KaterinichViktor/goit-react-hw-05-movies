@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate
 import api from './API';
 
 function SearchMovies() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate(); // Use the useNavigate hook
+  const currentLocation = useLocation();
 
   const handleSearch = async () => {
     try {
@@ -40,7 +41,7 @@ function SearchMovies() {
       <ul className='search-results'>
         {searchResults.map((movie) => (
           <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+            <Link to={`/movies/${movie.id}`} state={{ from: currentLocation }}>{movie.title}</Link>
           </li>
         ))}
       </ul>

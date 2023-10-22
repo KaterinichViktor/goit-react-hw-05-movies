@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SearchMovies from './SearchMovies';
 
 function Movies() {
   const [searchResults, setSearchResults] = useState([]);
+  const currentLocation = useLocation();
 
   const handleSearchResults = (results) => {
     setSearchResults(results);
@@ -15,7 +16,7 @@ function Movies() {
       <ul>
         {searchResults.map((movie) => (
           <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+            <Link to={`/movies/${movie.id}`} state={{ from: currentLocation }}>{movie.title}</Link>
           </li>
         ))}
       </ul>

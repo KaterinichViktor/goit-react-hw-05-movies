@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate, Routes, Route } from 'react-router-dom'; // Added useNavigate, Routes, Route, and Outlet
+import { useParams, Link, useNavigate, useLocation, Route, Routes } from 'react-router-dom';
 import api from './API';
 import Cast from './Cast';
 import Reviews from './Reviews';
@@ -10,7 +10,8 @@ function MovieDetails() {
   const [isCastOpen, setIsCastOpen] = useState(false);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const navigate = useNavigate(); // Added useNavigate
+  const navigate = useNavigate();
+  const currentLocation = useLocation();
 
   const userScorePercentage = movie.vote_average * 10;
 
@@ -20,7 +21,7 @@ function MovieDetails() {
         const movieResponse = await api.get(`/movie/${movieId}`);
         setMovie(movieResponse.data);
       } catch (error) {
-        console.error('Помилка при отриманні деталей фільму', error);
+        console.error('Error fetching movie details', error);
       }
     }
 
@@ -29,7 +30,7 @@ function MovieDetails() {
         const reviewsResponse = await api.get(`/movie/${movieId}/reviews`);
         setReviews(reviewsResponse.data.results);
       } catch (error) {
-        console.error('Помилка при отриманні оглядів', error);
+        console.error('Error fetching reviews', error);
       }
     }
 
@@ -37,32 +38,29 @@ function MovieDetails() {
     fetchReviews();
   }, [movieId]);
 
-// Function to toggle the Cast section
-const toggleCast = () => {
-  if (isReviewsOpen) {
-    // Close Reviews if it's open
-    setIsReviewsOpen(false);
-  }
-  // Toggle Cast
-  setIsCastOpen(!isCastOpen);
-  navigate(`/movies/${movieId}/cast`);
-};
+  // Function to toggle the Cast section
+  const toggleCast = () => {
+    if (isReviewsOpen) {
+      setIsReviewsOpen(false);
+    }
+    setIsCastOpen(!isCastOpen);
+    navigate(`/movies/${movieId}/cast`);
+  };
 
-// Function to toggle the Reviews section
-const toggleReviews = () => {
-  if (isCastOpen) {
-    // Close Cast if it's open
-    setIsCastOpen(false);
-  }
-  // Toggle Reviews
-  setIsReviewsOpen(!isReviewsOpen);
-  navigate(`/movies/${movieId}/reviews`);
-};
-
+  // Function to toggle the Reviews section
+  const toggleReviews = () => {
+    if (isCastOpen) {
+      setIsCastOpen(false);
+    }
+    setIsReviewsOpen(!isReviewsOpen);
+    navigate(`/movies/${movieId}/reviews`);
+  };
 
   return (
     <div className='movie-all-info'>
-      <button className='go-back'><Link to="/">Go back</Link></button>
+      <button className='go-back'>
+        <Link to={currentLocation.state?.from || '/'}>Go back</Link>
+      </button>
       <div className="movie-details">
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -71,7 +69,7 @@ const toggleReviews = () => {
         />
         <div className="movie-info">
           <h2>{movie.title}</h2>
-          <p>User score: {userScorePercentage}%</p> {/* Display user score as a percentage */}
+          <p>User score: {userScorePercentage}%</p>
           <h4>Overview</h4>
           <p>{movie.overview}</p>
           <h4>Genres</h4>
