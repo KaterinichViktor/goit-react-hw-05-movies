@@ -20,7 +20,7 @@ export const App = () => {
         color: '#010101'
       }}
     >
-      <Router>
+      <Router basename="/goit-react-hw-05-movies">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
