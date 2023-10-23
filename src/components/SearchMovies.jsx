@@ -8,6 +8,7 @@ function SearchMovies() {
   const navigate = useNavigate();
   const currentLocation = useLocation();
 
+
   const handleSearch = async (searchQuery) => {
     try {
       const response = await api.get('/search/movie', {
@@ -58,4 +59,7 @@ function SearchMovies() {
   );
 }
 
+
 export default SearchMovies;
+
+

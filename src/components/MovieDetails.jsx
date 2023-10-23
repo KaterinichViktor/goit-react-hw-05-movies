@@ -12,6 +12,7 @@ function MovieDetails() {
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
   const currentLocation = useLocation();
+  const parentLocation = currentLocation.state?.from; // Get the parent location
 
   const userScorePercentage = movie.vote_average * 10;
 
@@ -44,7 +45,7 @@ function MovieDetails() {
       setIsReviewsOpen(false);
     }
     setIsCastOpen(!isCastOpen);
-    navigate(`/movies/${movieId}/cast`);
+    navigate(`/movies/${movieId}/cast`, { state: { from: parentLocation } });
   };
 
   // Function to toggle the Reviews section
@@ -53,13 +54,13 @@ function MovieDetails() {
       setIsCastOpen(false);
     }
     setIsReviewsOpen(!isReviewsOpen);
-    navigate(`/movies/${movieId}/reviews`);
+    navigate(`/movies/${movieId}/reviews`, { state: { from: parentLocation } });
   };
 
   return (
     <div className='movie-all-info'>
       <button className='go-back'>
-        <Link to={currentLocation.state?.from || '/'}>Go back</Link>
+        <Link to={parentLocation}>Go back</Link>
       </button>
       <div className="movie-details">
         <img
