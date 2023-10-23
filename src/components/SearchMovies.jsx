@@ -1,38 +1,47 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from './API';
 
 function SearchMovies() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const navigate = useNavigate(); // Use the useNavigate hook
+  const navigate = useNavigate();
   const currentLocation = useLocation();
 
-  const handleSearch = async () => {
+  const handleSearch = async (searchQuery) => {
     try {
       const response = await api.get('/search/movie', {
-        params: { query },
+        params: { query: searchQuery },
       });
-      setSearchResults(response.data.results);
 
-      // Update the route with the search query
-      navigate(`/movies?query=${query}`);
+      // Update the route with both search query and results
+      navigate(`/movies?query=${searchQuery}`, {
+        state: { query: searchQuery, searchResults: response.data.results },
+      });
     } catch (error) {
-      console.error('Помилка при пошуку фільмів', error);
+      console.error('Error fetching movie details', error);
     }
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSearch();
+    handleSearch(query);
   };
+
+  useEffect(() => {
+    // Extract search query and search results from the location state
+    const { query, searchResults } = currentLocation.state || {};
+    if (query && searchResults) {
+      setQuery(query);
+      setSearchResults(searchResults);
+    }
+  }, [currentLocation.state]);
 
   return (
     <div>
       <form onSubmit={handleFormSubmit}>
         <input
           type="text"
-          // placeholder="Пошук фільмів"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
